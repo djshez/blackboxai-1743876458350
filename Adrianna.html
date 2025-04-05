@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adrianna - Interactive Stories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .story-transition {
+            transition: all 0.3s ease-in-out;
+        }
+        .choice-button:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease-in-out;
+        }
+        .story-card {
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s ease-in-out;
+        }
+        .story-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-purple-800 to-indigo-900 p-6 shadow-lg">
+        <div class="container mx-auto">
+            <h1 class="text-4xl font-bold text-center flex items-center justify-center">
+                <i class="fas fa-book-open mr-3 text-purple-300"></i>Adrianna
+            </h1>
+            <p class="text-center mt-2 text-gray-300">Where your choices shape the story</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Story Selection Screen -->
+        <div id="story-selection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="story-card bg-gradient-to-br from-purple-700 to-indigo-800 rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer" onclick="startStory('mystery')">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-magnifying-glass text-2xl mr-3 text-purple-300"></i>
+                    <h2 class="text-2xl font-bold">The Hidden Truth</h2>
+                </div>
+                <p class="text-gray-300 mb-4">Uncover a mysterious disappearance in a small town where nothing is as it seems.</p>
+                <div class="flex items-center text-sm text-gray-300">
+                    <i class="fas fa-clock mr-2"></i>
+                    <span>45 minutes</span>
+                    <i class="fas fa-star ml-4 mr-2"></i>
+                    <span>Mystery</span>
+                </div>
+            </div>
+
+            <div class="story-card bg-gradient-to-br from-rose-700 to-pink-800 rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer" onclick="startStory('romance')">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-heart text-2xl mr-3 text-rose-300"></i>
+                    <h2 class="text-2xl font-bold">Summer Love</h2>
+                </div>
+                <p class="text-gray-300 mb-4">Experience a whirlwind summer romance that could change your life forever.</p>
+                <div class="flex items-center text-sm text-gray-300">
+                    <i class="fas fa-clock mr-2"></i>
+                    <span>30 minutes</span>
+                    <i class="fas fa-star ml-4 mr-2"></i>
+                    <span>Romance</span>
+                </div>
+            </div>
+
+            <div class="story-card bg-gradient-to-br from-emerald-700 to-green-800 rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer" onclick="startStory('adventure')">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-mountain text-2xl mr-3 text-emerald-300"></i>
+                    <h2 class="text-2xl font-bold">Lost Paradise</h2>
+                </div>
+                <p class="text-gray-300 mb-4">Survive a mysterious island filled with ancient secrets and hidden dangers.</p>
+                <div class="flex items-center text-sm text-gray-300">
+                    <i class="fas fa-clock mr-2"></i>
+                    <span>60 minutes</span>
+                    <i class="fas fa-star ml-4 mr-2"></i>
+                    <span>Adventure</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story Content -->
+        <div id="story-content" class="hidden max-w-2xl mx-auto">
+            <div class="bg-gradient-to-br from-purple-700 to-indigo-800 rounded-lg p-6 shadow-xl mb-6">
+                <p id="story-text" class="text-lg mb-6 leading-relaxed"></p>
+                <div id="choices" class="space-y-4"></div>
+            </div>
+            <button onclick="backToSelection()" class="mt-4 text-gray-400 hover:text-white transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Stories
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Story content and logic
+        const stories = {
+            mystery: {
+                start: {
+                    text: "You arrive in the small town of Millbrook on a foggy morning. The local newspaper's headline catches your eye: 'Local Teen Missing for 48 Hours.'",
+                    choices: [
+                        {
+                            text: "Visit the police station for information",
+                            next: "police_station"
+                        },
+                        {
+                            text: "Go to the teen's last known location",
+                            next: "last_location"
+                        }
+                    ]
+                },
+                police_station: {
+                    text: "At the police station, Officer Martinez seems hesitant to share details. You notice a strange symbol on one of the case files.",
+                    choices: [
+                        {
+                            text: "Ask about the symbol",
+                            next: "symbol_inquiry"
+                        },
+                        {
+                            text: "Request to see the missing person's report",
+                            next: "missing_report"
+                        }
+                    ]
+                },
+                last_location: {
+                    text: "You arrive at the local library, where the teen was last seen. The librarian mentions seeing strange lights in the woods behind the building that night.",
+                    choices: [
+                        {
+                            text: "Investigate the woods",
+                            next: "woods_investigation"
+                        },
+                        {
+                            text: "Interview other library visitors",
+                            next: "library_interviews"
+                        }
+                    ]
+                }
+            },
+            romance: {
+                start: {
+                    text: "It's the first day of summer break, and you're walking along the beach when you spot someone struggling with their surfboard in the waves.",
+                    choices: [
+                        {
+                            text: "Rush into the water to help",
+                            next: "water_rescue"
+                        },
+                        {
+                            text: "Call the lifeguard for assistance",
+                            next: "lifeguard_help"
+                        }
+                    ]
+                }
+            },
+            adventure: {
+                start: {
+                    text: "Your vacation cruise takes an unexpected turn when you wake up on a mysterious island. Your phone has no signal, and there's no sign of the ship.",
+                    choices: [
+                        {
+                            text: "Search the beach for other survivors",
+                            next: "beach_search"
+                        },
+                        {
+                            text: "Explore the dense jungle",
+                            next: "jungle_exploration"
+                        }
+                    ]
+                }
+            }
+        };
+
+        let currentStory = null;
+        let currentNode = null;
+
+        function startStory(storyId) {
+            currentStory = storyId;
+            currentNode = 'start';
+            document.getElementById('story-selection').classList.add('hidden');
+            document.getElementById('story-content').classList.remove('hidden');
+            updateStory();
+        }
+
+        function updateStory() {
+            const node = stories[currentStory][currentNode];
+            const storyText = document.getElementById('story-text');
+            const choicesDiv = document.getElementById('choices');
+
+            // Update story text with fade effect
+            storyText.classList.add('opacity-0');
